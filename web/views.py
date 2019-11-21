@@ -30,6 +30,13 @@ def articleCurd(request):
     list = Article.objects.all()
     type=Type.objects.all()
     return render(request,'showArticle.html',{'articleList':list,'typeList':type})
+	
+	
+#查询所有文章
+def articleCurd(request):
+    list1 = Article.objects.all()
+    type1=Type.objects.all()
+    return render(request,'showArticle.html',{'articleList':list1,'typeList':type})
 
 
 #查询发表的文章
