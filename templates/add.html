@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>发表文章</title>
+</head>
+<body>
+
+
+ <div class="container">
+<form action="/article/addArticle/" method="post" role="form">
+	<input type="text" id="user_account" name="user_account" value="S01" />
+	<div class="form-group">
+		  <label class="control-label">请输入文章标题:&nbsp </label>
+		  <input class="form-control" type="text" name="title" placeholder="Enter name"/>
+	</div>
+	<div class="form-group">
+		  <label class="control-label">请输入内容:&nbsp </label>
+		  <input class="form-control" type="text" name="content" placeholder="Enter age"/>
+	</div>
+
+    	<div class="form-group">
+		  <label class="control-label">请选择类型:&nbsp </label>
+
+            <select class="liInput" name="type_id">
+                 {% for type in typeList %}
+                 <option value="{{type.type_id }}">{{ type.type_name }}</option>
+                 {% endfor %}
+            </select>
+	</div>
+
+<div class="form-group">
+        <input type="file" name="photo">
+</div>
+
+ <button id="one" type="submit" name="flag" value="0" class="btn btn-default ">草稿</button>
+
+<button id="one" type="submit" name="flag" value="1" class="btn btn-default ">发表</button>
+</form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	 <!-- 引入jQuery -->
+	<script src="http://apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	 <!-- 引入 Bootstrap -->
+	 <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+	 <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet" type="text/css">
+	  <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+	 <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+
+	 <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+	<script type="text/javascript">
+	 $(function() {
+           $("#checkAll").click(function() {
+			//不知为何$('input[name="subBox"]').attr("checked",this.checked);不行
+				var allvalue = document.getElementsByName('subBox');
+				 for (var i = 0; i < allvalue.length; i++) {
+					if (allvalue[i].type == "checkbox")
+						allvalue[i].checked = this.checked;  //遍历所有subBox，设置为主checkbox属性
+					}
+            });
+            var $subBox = $("input[name='subBox']");
+            $subBox.click(function(){//当点击subBox时，将主checkbox设置为false（通过检测是否全选）
+                $("#checkAll").attr("checked",$subBox.length == $("input[name='subBox']:checked").length ? true : false);
+            });
+        });
+	function GetCkboxValues() {
+		var arr = new Array() //通过数组列表保存所有用户id，实现批量删除功能
+	   $("input:checkbox:checked").each(function () {
+			arr.push($(this).val())
+	   })
+	   if (arr == ""){//没有选择的条件下做出弹窗提示
+			alert("Please select at least one item ")
+	   }
+	   $.ajax({ //ajax实现GET方式动态加载，为啥POST不行？
+		   type: "GET",
+           url: "/delSelect",
+           data: "arr="+arr,
+           success: function(msg){
+			//通过模拟点击查询按钮，刷新当前页面
+			   $("#queryById").click()
+        }
+    });
+  };
+	</script>
+    <title>数据展示平台</title>
+
+</head>
+<style>
+<!-- 设置table内容居中 -->
+ .table th, .table td {
+		text-align: center;
+}
+
+</style>
+<body>
+<caption>文章类型</caption>
+<table class="table table-bordered form-inline">
+
+ {% for type in typeList %}
+    <tr>
+   <td>{{ type.type_name}}</td>
+    </tr>
+{% endfor %}
+
+</table>
+
+<table class="table table-bordered form-inline" align="center">
+<a href="/article/addArticlePage" class="text-danger">发表文章</a>
+<tbody >
+
+ {%  for article in articleList %}
+     <a href="/article/articleDetails?id={{article.article_id }}" class="text-danger">
+         <h2>{{ article.title }}</h2>
+     </a>
+      <h4>{{ article.content |truncatechars:50 }}</h4>
+      <h6>浏览量：{{ article.page_view }}</h6>
+ </tr>
+{% endfor %}
+</tbody>
+
+</table>
+
+
+</div>
+
+
+
+<!-- 分页导航栏 -->
+ <p>
+
+	{% if articleList.has_previous %}
+		<a href="?page={{ articleList.previous_page_number }}">上一页</a>
+	{% endif %}
+		{# data.paginator.number_pages 返回总页数 #}
+		第{{ articleList.number }}页 | 共{{ articleList.paginator.num_pages }}页
+	{% if articleList.has_next %}
+		<a href="?page={{ articleList.next_page_number }}">下一页</a>
+	{% endif %}
+
+ <input type="text" name="page" id="page" />
+     <input type="submit">转到
+     </input>
+</p>
+
+</body>
+</html>

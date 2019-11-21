@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文章详情</title>
+</head>
+<body>
+
+
+
+
+<table class="table table-bordered form-inline" align="center">
+
+<tbody >
+
+     <a href="/article/articleDetails?id={{article.article_id }}" class="text-danger">
+         <h2>{{ article.title }}</h2>
+     </a>
+      <h6>浏览量：{{ article.page_view }}</h6><h6>作者：{{ article.user_account.user_name }}</h6>
+     <h6>发表时间：{{ article.create_time|date:"Y-m-d H:i:s" }}</h6>
+      <h4>{{ article.content }}</h4>
+
+</tbody>
+
+</table>
+
+
+</div>
+
+</body>
+</html>
